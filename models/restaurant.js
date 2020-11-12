@@ -1,5 +1,8 @@
+//載入套件
 const mongoose = require('mongoose')
+//使用mongoose.Schema
 const Schema = mongoose.Schema
+//建立Schema規則
 const restaurantSchema = new Schema({
   name: {
     type: String, // 資料型別是字串
@@ -15,4 +18,5 @@ const restaurantSchema = new Schema({
   description: String
 })
 
+//匯出模型樣板
 module.exports = mongoose.model('RestaurantData', restaurantSchema)

@@ -1,12 +1,14 @@
+//載入套件
 const mongoose = require('mongoose')
-const RestaurantData = require('../restaurant') // 載入 restaurant model
+// 載入 restaurant model
+const RestaurantData = require('../restaurant')
+
+//連線字串
 mongoose.connect('mongodb://localhost/restaurant-list', { useNewUrlParser: true, useUnifiedTopology: true })
+//連線狀態
 const db = mongoose.connection
 
-//const restNAme = ['Sababa 沙巴巴中東美食', '梅子鰻蒲燒專賣店', 'ZIGA ZIGA', '艾朋牛排餐酒館', 'Gusto Pizza', 'WXYZ Bar', 'Fika Fika Cafe', '布娜飛比利時啤酒餐廳']
-
-// const restName_en = ['Sababa Pita Bar', 'Umeko Japanese Unagi House', 'Ziga Zaga', 'A Point Steak & Bar', 'Gusto Pizza', 'WXYZ Bar', 'Fika Fika Cafe', 'Bravo Beer']
-
+//範本資料
 const results = [
   {
     "name": "Sababa 沙巴巴中東美食",
@@ -98,10 +100,12 @@ const results = [
   }
 ]
 
+//監聽error事件
 db.on('error', () => {
   console.log('mongodb error')
 })
 
+//新增種子資料
 db.once('open', () => {
   console.log('mongodb connected!')
   for (let i = 0; i < results.length; i++) {
