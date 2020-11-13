@@ -23,6 +23,7 @@ handlebars.registerHelper('if_equal', function (job, expectedJob, options) {
   return options.inverse(this);
 })
 
+//設定連線字串
 mongoose.connect('mongodb://localhost/restaurant-list', { useNewUrlParser: true, useUnifiedTopology: true })
 // 取得資料庫連線狀態
 const db = mongoose.connection
@@ -46,25 +47,29 @@ app.get('/', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
+  //取得keyword
   const keyword = req.query.keyword
   let restaurantList = []
+  //資料庫撈資料
   RestaurantData.find()
     .lean()
     .then((restaurants) => {
+      //查詢符合keyword的店家
       restaurantList = restaurants.filter((item) => {
-        console.log(item.name)
         return (item.name.toLowerCase().trim().includes(keyword.toLowerCase().trim())) || (item.category.toLowerCase().trim().includes(keyword.toLowerCase().trim()))
       })
-
+      //讀取index檔案、渲染畫面
       return res.render('index', { restaurants: restaurantList, keyword: keyword })
     })
     .catch((error) => console.log(error))
 })
 
 app.get('/restaurants/new', (req, res) => {
+  //讀取new檔案、渲染畫面
   res.render('new')
 })
 
+//新增
 app.post('/restaurants/new', (req, res) => {
   // 從 req.body 拿出表單裡的資料
   const options = req.body
@@ -85,7 +90,9 @@ app.post('/restaurants/new', (req, res) => {
     .catch((error) => console.log(error))
 })
 
+//讀取特定資料
 app.get('/restaurant/:id/detail', (req, res) => {
+  //取得restaurant_id
   const id = req.params.id
   return RestaurantData.findById(id)  //從資料庫找出資料
     .lean()  //把資料轉成javascript物件
@@ -94,6 +101,7 @@ app.get('/restaurant/:id/detail', (req, res) => {
 })
 
 app.get('/restaurant/:id/edit', (req, res) => {
+  //取得restaurant_id
   const id = req.params.id
   return RestaurantData.findById(id)
     .lean()
@@ -101,15 +109,27 @@ app.get('/restaurant/:id/edit', (req, res) => {
     .catch((error) => console.log(error))
 })
 
+//修改
 app.post('/restaurant/:id/edit', (req, res) => {
+  //取得restaurant_id
   const id = req.params.id
   const options = req.body
   return RestaurantData.findById(id)
     .then((restaurant) => {
+      //對應資料，寫入資料庫
       restaurant = Object.assign(restaurant, options)
       return restaurant.save()
     })
     .then(() => res.redirect(`/restaurant/${id}/detail`))
+    .catch((error) => console.log(error))
+})
+
+//刪除
+app.post('/restaurant/:id/delete', (req, res) => {
+  const id = req.params.id
+  return RestaurantData.findById(id)
+    .then((restaurant) => restaurant.remove())
+    .then(() => res.redirect('/'))
     .catch((error) => console.log(error))
 })
 
