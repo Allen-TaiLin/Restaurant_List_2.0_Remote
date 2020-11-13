@@ -52,6 +52,30 @@ app.get('/search', (req, res) => {
     .catch((error) => console.log(error))
 })
 
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/restaurants/new', (req, res) => {
+  // 從 req.body 拿出表單裡的資料
+  const options = req.body
+  //建立實例模型
+  const restaurantAddNew = new RestaurantData({
+    name: options.name,
+    category: options.category,
+    image: options.image,
+    location: options.location,
+    phone: options.phone,
+    google_map: options.google_map,
+    rating: options.rating,
+    description: options.description
+  })
+  //將實例存入資料庫
+  return restaurantAddNew.save()
+    .then(() => res.redirect('/'))
+    .catch((error) => console.log(error))
+})
+
 // start and listen on the Express server
 app.listen(port, () => {
   console.log(`Express is listening on http://localhost:${port}`)
