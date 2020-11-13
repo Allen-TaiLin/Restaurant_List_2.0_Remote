@@ -8,9 +8,15 @@
           類別：
         </span>
         {{restaurant.category}}
-        <a href="/" class="ml-auto bd-highlight">
-          <button class="btn btn-info">返回</button>
-        </a>
+        <span class="ml-auto bd-highlight">
+          <a href="/restaurant/{{ restaurant._id }}/edit" class="mr-2" style="text-decoration:none;">
+            <button class="btn btn-info">Edit</button>
+          </a>
+          <a href="/" class="" style="text-decoration:none;">
+            <button class="btn btn-warning">Back</button>
+          </a>
+        </span>
+
       </p>
 
       <p class="mb-2">

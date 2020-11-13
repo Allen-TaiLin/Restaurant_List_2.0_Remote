@@ -3,6 +3,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const handlebars = require('handlebars')
 const RestaurantData = require('./models/restaurant.js') // 載入 restaurant model
 const app = express()
 const port = 3000
@@ -13,6 +14,14 @@ app.set('view engine', 'hbs')
 // setting static files
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
+
+//自定義helper
+handlebars.registerHelper('if_equal', function (job, expectedJob, options) {
+  if (job === expectedJob) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+})
 
 mongoose.connect('mongodb://localhost/restaurant-list', { useNewUrlParser: true, useUnifiedTopology: true })
 // 取得資料庫連線狀態
@@ -82,6 +91,26 @@ app.get('/restaurant/:id/detail', (req, res) => {
     .lean()  //把資料轉成javascript物件
     .then((restaurant) => res.render('detail', { restaurant: restaurant }))  //發送至前端樣板
     .catch((error) => console.log(error))  //例外處理
+})
+
+app.get('/restaurant/:id/edit', (req, res) => {
+  const id = req.params.id
+  return RestaurantData.findById(id)
+    .lean()
+    .then((restaurant) => res.render('edit', { restaurant: restaurant }))
+    .catch((error) => console.log(error))
+})
+
+app.post('/restaurant/:id/edit', (req, res) => {
+  const id = req.params.id
+  const options = req.body
+  return RestaurantData.findById(id)
+    .then((restaurant) => {
+      restaurant = Object.assign(restaurant, options)
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurant/${id}/detail`))
+    .catch((error) => console.log(error))
 })
 
 // start and listen on the Express server
