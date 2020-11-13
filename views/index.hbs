@@ -38,8 +38,40 @@
               </span>
 
             </div>
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-4">
+                  <form action="/{{ this._id }}/edit" method="GET">
+                    <button type="submit" class="edit-btn">
+                      <i class="fas fa-pen-square"></i>
+                      Edit
+                    </button>
+                  </form>
+                </div>
+                <div class="col-4 p-0">
+                  <form action="/restaurant/{{this._id}}/detail" method="GET">
+                    <button type="submit" class="detail-btn">
+                      <i class="fas fa-outdent"></i>
+                      Detail
+                    </button>
+                  </form>
+                </div>
+                <div class="col-4 p-0">
+                  <form action="/{{ this._id }}/delete" method="POST">
+                    <button type="submit" class="edit-btn" id="delete-btn"><i class="far fa-trash-alt"></i>
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+
+
+            </div>
           </div>
+
         </a>
+
         {{/each}}
       </div>
     </div>
