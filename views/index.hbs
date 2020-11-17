@@ -54,7 +54,7 @@
                   </form>
                 </div>
                 <div class="col-4 p-0">
-                  <form action="/restaurant/{{ this._id }}/delete" method="POST">
+                  <form action="/restaurant/{{ this._id }}/delete" method="POST" onsubmit="return deleteAlert()">
                     <button type="submit" class="edit-btn" id="delete-btn"><i class="far fa-trash-alt"></i>
                       Delete
                     </button>
